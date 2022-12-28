@@ -9,7 +9,7 @@ client:
     level: info
 
   cryptoconfig:
-    path: /home/jeho/go/src/fabric-sdk-go-modulization/fixtures/crypto-config
+    path: /home/jeho/go/src/restfulsdk/fixtures/crypto-config
 
   credentialStore:
 
@@ -35,15 +35,12 @@ client:
     # [Optional]. Client key and cert for TLS handshake with peers and orderers
     client:
       key:
-        path: /home/jeho/go/src/fabric-sdk-go-modulization/fixtures/crypto-config/peerOrganizations/org1.example.com/users/User1@org1.example.com/tls/client.key
+        path: /home/jeho/go/src/restfulsdk/fixtures/crypto-config/peerOrganizations/org1.example.com/users/User1@org1.example.com/tls/client.key
       cert:
-        path: /home/jeho/go/src/fabric-sdk-go-modulization/fixtures/crypto-config/peerOrganizations/org1.example.com/users/User1@org1.example.com/tls/client.crt
+        path: /home/jeho/go/src/restfulsdk/fixtures/crypto-config/peerOrganizations/org1.example.com/users/User1@org1.example.com/tls/client.crt
 
 
 channels:
-
-
-
   # multi-org test channel
   mychannel:
 
@@ -79,19 +76,11 @@ organizations:
     mspid: Org1MSP
 
     # This org's MSP store (absolute path or relative to client.cryptoconfig)
-    cryptoPath:   /home/jeho/go/src/fabric-sdk-go-modulization/fixtures/crypto-config/peerOrganizations/org1.example.com/users/{username}@org1.example.com/msp
+    cryptoPath:   /home/jeho/go/src/restfulsdk/fixtures/crypto-config/peerOrganizations/org1.example.com/users/{username}@org1.example.com/msp
 
     peers:
       - peer0.org1.example.com
       - peer1.org1.example.com
-
-
-
-
-
-
-
-
 
     # [Optional]. Certificate Authorities issue certificates for identification purposes in a Fabric based
     # network. Typically certificates provisioning is done in a separate process outside of the
@@ -122,7 +111,7 @@ organizations:
     mspID: OrdererMSP
 
     # Needed to load users crypto keys and certs for this org (absolute path or relative to global crypto path, DEV mode)
-    cryptoPath:  /home/jeho/go/src/fabric-sdk-go-modulization/fixtures/crypto-config/ordererOrganizations/example.com/users/{username}@example.com/msp
+    cryptoPath:  /home/jeho/go/src/restfulsdk/fixtures/crypto-config/ordererOrganizations/example.com/users/{username}@example.com/msp
 
 
 #
@@ -153,7 +142,7 @@ orderers:
 
     tlsCACerts:
       # Certificate location absolute path
-      path: /home/jeho/go/src/fabric-sdk-go-modulization/fixtures/crypto-config/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem
+      path: /home/jeho/go/src/restfulsdk/fixtures/crypto-config/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem
 
 #
 # List of peers to send various requests to, including endorsement, query
@@ -180,7 +169,7 @@ peers:
 
     tlsCACerts:
       # Certificate location absolute path
-      path: /home/jeho/go/src/fabric-sdk-go-modulization/fixtures/crypto-config/peerOrganizations/org1.example.com/tlsca/tlsca.org1.example.com-cert.pem
+      path: /home/jeho/go/src/restfulsdk/fixtures/crypto-config/peerOrganizations/org1.example.com/tlsca/tlsca.org1.example.com-cert.pem
 
 
   peer1.org1.example.com:
@@ -199,7 +188,7 @@ peers:
       # allow-insecure will be taken into consideration if address has no protocol defined, if true then grpc or else grpcs
       allow-insecure: false
     tlsCACerts:
-      path: /home/jeho/go/src/fabric-sdk-go-modulization/fixtures/crypto-config/peerOrganizations/org1.example.com/tlsca/tlsca.org1.example.com-cert.pem
+      path: /home/jeho/go/src/restfulsdk/fixtures/crypto-config/peerOrganizations/org1.example.com/tlsca/tlsca.org1.example.com-cert.pem
 
 
 

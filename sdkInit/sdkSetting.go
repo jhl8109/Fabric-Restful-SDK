@@ -15,9 +15,7 @@ import (
 	lcpackager "github.com/hyperledger/fabric-sdk-go/pkg/fab/ccpackager/lifecycle"
 	"github.com/hyperledger/fabric-sdk-go/pkg/fabsdk"
 	"github.com/hyperledger/fabric-sdk-go/third_party/github.com/hyperledger/fabric/common/policydsl"
-	"log"
 	"strings"
-	"time"
 )
 
 func InitOrgContext(configFile string, info *SdkEnvInfo) (*fabsdk.FabricSDK, error) {
@@ -30,7 +28,7 @@ func InitOrgContext(configFile string, info *SdkEnvInfo) (*fabsdk.FabricSDK, err
 
 	// Obtain Client handle and Context information for the organization
 	for _, org := range info.Orgs {
-		org.orgMspClient, err = mspclient.New(sdk.Context(), mspclient.WithOrg(org.OrgName))
+		org.OrgMspClient, err = mspclient.New(sdk.Context(), mspclient.WithOrg(org.OrgName))
 		if err != nil {
 			return nil, err
 		}
@@ -61,7 +59,7 @@ func CreateAndJoinChannel(info *SdkEnvInfo) error {
 	signIds := []msp.SigningIdentity{}
 	for _, org := range info.Orgs {
 		// Get signing identity that is used to sign create channel request
-		orgSignId, err := org.orgMspClient.GetSigningIdentity(org.OrgAdminUser)
+		orgSignId, err := org.OrgMspClient.GetSigningIdentity(org.OrgAdminUser)
 		if err != nil {
 			return fmt.Errorf("GetSigningIdentity error: %v", err)
 		}
@@ -69,7 +67,7 @@ func CreateAndJoinChannel(info *SdkEnvInfo) error {
 	}
 
 	// create channel
-	if err := createChannel(signIds, info); err != nil {
+	if err := CreateChannel(signIds, info); err != nil {
 		return fmt.Errorf("Create channel error: %v", err)
 	}
 
@@ -87,7 +85,7 @@ func CreateAndJoinChannel(info *SdkEnvInfo) error {
 	return nil
 }
 
-func createChannel(signIDs []msp.SigningIdentity, info *SdkEnvInfo) error {
+func CreateChannel(signIDs []msp.SigningIdentity, info *SdkEnvInfo) error {
 	// Channel management client is responsible for managing channels (create/update channel)
 	chMgmtClient, err := resmgmt.New(*info.OrdererClientContext)
 	if err != nil {
@@ -130,12 +128,8 @@ func CreateCCLifecycle(info *SdkEnvInfo, sequence int64, upgrade bool, sdk *fabs
 		return fmt.Errorf("pakcagecc error: %v", err)
 	}
 
-	startTime := time.Now()
-	log.Println(fmt.Printf("패키징 시작시간 : %s\n", startTime))
 	packageID := lcpackager.ComputePackageID(label, ccPkg)
 	fmt.Println(">> packaged chaincode successfully")
-	elapsedTime := time.Since(startTime)
-	log.Println(fmt.Printf("패키징 실행시간 : %s\n", elapsedTime))
 
 	// Install cc
 	fmt.Println(">> Start installing chaincode...")
@@ -155,14 +149,10 @@ func CreateCCLifecycle(info *SdkEnvInfo, sequence int64, upgrade bool, sdk *fabs
 	fmt.Println(">> chaincode installed successfully")
 
 	// Approve cc
-	startTime = time.Now()
-	log.Println(fmt.Printf("승인 시작시간 : %s\n", startTime))
 	fmt.Println(">> organization approved smart contract definition...")
 	if err := approveCC(packageID, info.ChaincodeID, info.ChaincodeVersion, sequence, info.ChannelID, info.Orgs, info.OrdererEndpoint); err != nil {
 		return fmt.Errorf("approveCC error: %v", err)
 	}
-	elapsedTime = time.Since(startTime)
-	log.Println(fmt.Printf("승인 실행시간 : %s\n", elapsedTime))
 
 	// Query approve cc
 	if err := queryApprovedCC(info.ChaincodeID, sequence, info.ChannelID, info.Orgs); err != nil {
@@ -178,14 +168,10 @@ func CreateCCLifecycle(info *SdkEnvInfo, sequence int64, upgrade bool, sdk *fabs
 	fmt.Println(">> smart contract is ready")
 
 	// Commit cc
-	startTime = time.Now()
-	log.Println(fmt.Printf("커밋 시작시간 : %s\n", startTime))
 	fmt.Println(">> commit chaincode ......")
 	if err := commitCC(info.ChaincodeID, info.ChaincodeVersion, sequence, info.ChannelID, info.Orgs, info.OrdererEndpoint); err != nil {
 		return fmt.Errorf("commitCC error: %v", err)
 	}
-	elapsedTime = time.Since(startTime)
-	log.Println(fmt.Printf("커밋 실행시간 : %s\n", elapsedTime))
 	// Query committed cc
 	if err := queryCommittedCC(info.ChaincodeID, info.ChannelID, sequence, info.Orgs); err != nil {
 		return fmt.Errorf("queryCommittedCC error: %v", err)
@@ -193,15 +179,11 @@ func CreateCCLifecycle(info *SdkEnvInfo, sequence int64, upgrade bool, sdk *fabs
 	fmt.Println(">> smart contract definition submitted")
 
 	// Init cc
-	startTime = time.Now()
-	log.Println(fmt.Printf("init 시작시간 : %s\n", startTime))
 	fmt.Println(">> call smart contract initialization method...")
 	if err := initCC(info.ChaincodeID, upgrade, info.ChannelID, info.Orgs[0], sdk); err != nil {
 		return fmt.Errorf("initCC error: %v", err)
 	}
 	fmt.Println(">> complete smart contract initialization")
-	elapsedTime = time.Since(startTime)
-	log.Println(fmt.Printf("init 실행시간 : %s\n", elapsedTime))
 	return nil
 }
 

@@ -13,7 +13,7 @@ type OrgInfo struct {
 	OrgName               string // like "Org1"
 	OrgMspId              string // like "Org1MSP"
 	OrgUser               string // like "User1"
-	orgMspClient          *mspclient.Client
+	OrgMspClient          *mspclient.Client
 	OrgAdminClientContext *contextAPI.ClientProvider
 	OrgResMgmt            *resmgmt.Client
 	OrgPeerNum            int

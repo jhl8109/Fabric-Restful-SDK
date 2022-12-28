@@ -39,9 +39,9 @@ services:
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
     volumes:
-      - /home/jeho/go/src/fabric-sdk-go-modulization/fixtures/channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-      - /home/jeho/go/src/fabric-sdk-go-modulization/fixtures/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp:/var/hyperledger/orderer/msp
-      - /home/jeho/go/src/fabric-sdk-go-modulization/fixtures/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/:/var/hyperledger/orderer/tls
+      - /home/jeho/go/src/restfulsdk/fixtures/channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - /home/jeho/go/src/restfulsdk/fixtures/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp:/var/hyperledger/orderer/msp
+      - /home/jeho/go/src/restfulsdk/fixtures/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/:/var/hyperledger/orderer/tls
       - orderer.example.com:/var/hyperledger/production/orderer
     ports:
       - 7050:7050
@@ -81,8 +81,8 @@ services:
       - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=123456
     volumes:
       - /var/run/:/host/var/run/
-      - /home/jeho/go/src/fabric-sdk-go-modulization/fixtures/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/fabric/msp
-      - /home/jeho/go/src/fabric-sdk-go-modulization/fixtures/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls:/etc/hyperledger/fabric/tls
+      - /home/jeho/go/src/restfulsdk/fixtures/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/fabric/msp
+      - /home/jeho/go/src/restfulsdk/fixtures/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls:/etc/hyperledger/fabric/tls
       - peer0.org1.example.com:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
@@ -129,8 +129,8 @@ services:
       - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=123456
     volumes:
       - /var/run/:/host/var/run/
-      - /home/jeho/go/src/fabric-sdk-go-modulization/fixtures/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/msp:/etc/hyperledger/fabric/msp
-      - /home/jeho/go/src/fabric-sdk-go-modulization/fixtures/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls:/etc/hyperledger/fabric/tls
+      - /home/jeho/go/src/restfulsdk/fixtures/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/msp:/etc/hyperledger/fabric/msp
+      - /home/jeho/go/src/restfulsdk/fixtures/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls:/etc/hyperledger/fabric/tls
       - peer1.org1.example.com:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
@@ -157,7 +157,7 @@ services:
       - 7054:7054
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
-      - /home/jeho/go/src/fabric-sdk-go-modulization/fixtures/crypto-config/peerOrganizations/org1.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - /home/jeho/go/src/restfulsdk/fixtures/crypto-config/peerOrganizations/org1.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
     networks:
       - test
 
